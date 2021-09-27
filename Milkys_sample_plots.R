@@ -5,7 +5,7 @@ library(dplyr)    # for filter and %>%
 #
 # Individual measurements  
 #
-dat_ind <- read.csv("Milkys_individual_data_selection.csv")
+dat_ind <- read.csv("Datasets/Milkys_individual_data_selection_utf8.csv", encoding = "UTF-8")
 
 ggplot(dat_ind %>% filter(Substance == "HG" & Species == "Gadus morhua" & Station_code == "30B"), 
        aes(Body_length, Conc, color = Limit_of_quantification)) +
@@ -24,3 +24,4 @@ ggplot(dat_median %>% filter(Substance == param & Species == "Mytilus edulis"),
   geom_point() +
   facet_wrap(vars(Station_code)) +
   labs(title = paste(param, "in blue mussel"))
+
