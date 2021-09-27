@@ -1,0 +1,3 @@
+THe following files contain some selected data from the MILKYS project and were extracted from NIVAbasen: 
+- Milkys_individual_data_selection.csv
+- Milkys_median_data_selection.csv
