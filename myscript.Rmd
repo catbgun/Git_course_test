@@ -1,0 +1,77 @@
+---
+title: "myscript"
+author: "DHJ"
+date: "27 9 2021"
+output: html_document
+---
+
+## 1. Functions
+```{r setup}
+
+library(dplyr)    # for filter and %>%
+library(ggplot2)  # for plotting
+
+```
+
+## 2. Read data
+```{r}
+
+#
+# Individual measurements  
+#
+dat_ind <- read.csv("Datasets/Milkys_individual_data_selection_utf8.csv", encoding = "UTF-8")
+
+```
+
+## 3. Plot individual measurements  
+
+### Plot mercury concentration vs. length for cod in Inner Oslo fjord (30B)  
+
+```{r, fig.width=9, fig.height=7}
+
+ggplot(dat_ind %>% filter(Substance == "HG" & Species == "Gadus morhua" & Station_code == "30B"), 
+       aes(Body_length, Conc, color = Limit_of_quantification)) +
+  geom_point() +
+  facet_wrap(vars(Year)) +
+  labs(title = "Mercury concentration vs. body length")
+
+# To change colors: add the line
+# scale_color_manual(values = c("red3", "skyblue")) +
+
+
+```
+
+## 4. Create data set of median per substance/station/year    
+
+```{r}
+
+dat_median <- dat_ind %>%
+  group_by(Station_code, Station_name, Lat, Long, Species, Tissue, Substance, Year) %>%
+  summarise(
+    Conc = median(Conc),
+    Limit_of_quantification = ifelse(mean(Limit_of_quantification == "Over LOQ") > 0.5, 
+                                     "Over LOQ", 
+                                     "Under LOQ"),
+    Body_length = median(Body_length),
+    .groups = "drop"
+    )
+
+```
+
+
+## 5. Plot median measurements  
+
+```{r, fig.width=9, fig.height=7}
+
+param <- "CB118"
+ggplot(dat_median %>% filter(Substance == param & Species == "Mytilus edulis"), 
+       aes(Year, Conc, color = Limit_of_quantification)) +
+  geom_point() +
+  facet_wrap(vars(Station_code)) +
+  labs(title = paste(param, "in blue mussel"))
+
+# To change colors: add the line
+# scale_color_manual(values = c("red3", "skyblue")) +
+
+```
+
