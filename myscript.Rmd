@@ -68,10 +68,12 @@ ggplot(dat_median %>% filter(Substance == param & Species == "Mytilus edulis"),
        aes(Year, Conc, color = Limit_of_quantification)) +
   geom_point() +
   facet_wrap(vars(Station_code)) +
+  scale_color_manual(values = c("red3", "skyblue")) +
   labs(title = paste(param, "in blue mussel"))
 
 # To change colors: add the line
 # scale_color_manual(values = c("red3", "skyblue")) +
+
 
 ```
 
